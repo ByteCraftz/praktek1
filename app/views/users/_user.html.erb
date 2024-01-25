@@ -1,0 +1,34 @@
+<div id="<%= dom_id user %>">
+  <p>
+    <strong>Name:</strong>
+    <%= user.name %>
+  </p>
+
+  <p>
+    <strong>Bio:</strong>
+    <%= user.bio %>
+  </p>
+
+  <% if user.avatar.attached? %>
+    <p>
+      <strong>Avatar:</strong>
+      <%= image_tag user.avatar %> <%# Display the avatar (single image) %>
+    </p>
+  <% else %>
+    <p>
+      <em>No avatar available</em>
+    </p>
+  <% end %>
+
+  <p>
+    <strong>Images:</strong>
+    <% user.images.each do |image| %>
+      <%= image_tag image %>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Content:</strong>
+    <%= user.content %> <%# Display rich text content %>
+  </p>
+</div>
