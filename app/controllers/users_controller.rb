@@ -6,10 +6,23 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
-  # GET /users/1 or /users/1.json
   def show
-  end
-
+    @user = User.find(params[:id])
+    if @user.avatar.attached?
+      file_path = Rails.root.join('storage', @user.avatar.filename.to_s)
+      puts "File Path: #{file_path}" # Tambahkan baris ini untuk debugging
+      
+      if File.exist?(file_path)
+        send_file file_path, type: @user.avatar.content_type, disposition: 'inline'
+      else
+        puts "File Not Found" # Tambahkan baris ini untuk debugging
+        render plain: 'File not found', status: :not_found
+      end
+    else
+      render plain: 'File not found', status: :not_found
+    end
+  end  
+  
   # GET /users/new
   def new
     @user = User.new
@@ -63,8 +76,7 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
-    def user_params
-      params.require(:user).permit(:name, :bio)
-    end
+  def user_params
+    params.require(:user).permit(:name, :bio, :avatar, { images: [] }, :content)
+  end
 end
